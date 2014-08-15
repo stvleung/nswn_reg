@@ -16,8 +16,8 @@ my %field_map = (
   'E-mail'               => 'entry.24747392',
   'Phone'                => 'entry.537003944',
   'Year in school'       => 'entry.1762211759',
-  'I came today through' => 'entry.765088178',
-  'I am interested in'   => 'entry.1067407543',
+  'I came today through' => 'entry.6833500',
+  'I am interested in'   => 'entry.1007844903',
   'UUID'                 => 'entry.1311627678',
 );
 
