@@ -1,0 +1,9 @@
+requires 'Mojolicious';
+requires 'Mojolicious::Plugin::AccessLog';
+requires 'Data::UUID';
+requires 'Email::Sender';
+requires 'Email::MIME';
+requires 'Net::SMTP::SSL';
+requires 'Authen::SASL';
+requires 'MIME::Base64';
+requires 'Starman';

@@ -1,0 +1,137 @@
+% layout 'default';
+% title 'NSWN Registration 2013';
+
+<style type="text/css">
+body           { padding: 60px 20px; }
+.navtarget     { position: relative; top: -65px; }
+#hidden-iframe { display: none; }
+</style>
+
+<script src="/js/jquery.validate.min.js"></script>
+<script src="/js/jquery.form.min.js"></script>
+
+<script>
+var formSubmitted = false;
+
+function getConfirmation() {
+  if (formSubmitted) {
+    $("#reg-form").attr({action: "/confirmation", target: "_self"});
+    $("#reg-form").submit();
+  }
+}
+
+$(document).ready(function() {
+  $("#reg-form").validate({
+    errorClass: "help-block",
+    errorPlacement: function(error, element) {
+      element.parent().addClass("has-error");
+      error.appendTo( element.parent() );
+    },
+    submitHandler: function(form) {formSubmitted = true; form.submit();}
+  });
+});
+</script>
+
+<iframe name="hidden-iframe" id="hidden-iframe" onload="getConfirmation();"></iframe>
+
+<nav id="navbar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">NSWN Registration</a>
+  </div>
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+      <li><a href="#info">Info</a></li>
+      <li><a href="#survey">Survey</a></li>
+    </ul>
+    <img class="pull-left" src="/img/sfsu_logo.png" width="197" height="50" />
+  </div>
+</nav>
+
+<p class="lead">We’re glad you’re here!  Please tell us a little bit about yourself!</p>
+
+<form id="reg-form" role="form" action="https://docs.google.com/forms/d/<%= $google_form_id %>/formResponse?embedded=true" method="post" target="hidden-iframe">
+  <div id="info" class="navtarget"></div>
+  <div class="form-group">
+    <label class="sr-only" for="<%= $field_map->{'First Name'} %>">First Name</label>
+    <input type="text" class="form-control" id="<%= $field_map->{'First Name'} %>" name="<%= $field_map->{'First Name'} %>" placeholder="First Name" required>
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="<%= $field_map->{'Last Name'} %>">Last Name</label>
+    <input type="text" class="form-control" id="<%= $field_map->{'Last Name'} %>" name="<%= $field_map->{'Last Name'} %>" placeholder="Last Name" required>
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="<%= $field_map->{'E-mail'} %>">E-mail</label>
+    <input type="email" class="form-control" id="<%= $field_map->{'E-mail'} %>" name="<%= $field_map->{'E-mail'} %>" placeholder="E-mail" required>
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="<%= $field_map->{'Phone'} %>">Phone</label>
+    <input type="tel" class="form-control" id="<%= $field_map->{'Phone'} %>" name="<%= $field_map->{'Phone'} %>" placeholder="Phone" required>
+  </div>
+  <div id="survey" class="navtarget"></div>
+  <div class="form-group">
+    <label for="<%= $field_map->{'Year in school'} %>">Year in school</label>
+    <select class="form-control" id="<%= $field_map->{'Year in school'} %>" name="<%= $field_map->{'Year in school'} %>">
+      <option id="<%= $field_map->{'Year in school'} %>_0" name="<%= $field_map->{'Year in school'} %>"></option>
+      <option id="<%= $field_map->{'Year in school'} %>_1" name="<%= $field_map->{'Year in school'} %>">Freshman</option>
+      <option id="<%= $field_map->{'Year in school'} %>_2" name="<%= $field_map->{'Year in school'} %>">Sophomore</option>
+      <option id="<%= $field_map->{'Year in school'} %>_3" name="<%= $field_map->{'Year in school'} %>">Junior</option>
+      <option id="<%= $field_map->{'Year in school'} %>_4" name="<%= $field_map->{'Year in school'} %>">Senior</option>
+      <option id="<%= $field_map->{'Year in school'} %>_5" name="<%= $field_map->{'Year in school'} %>">Grad</option>
+    </select>
+  </div>
+  <label for="<%= $field_map->{'I came today through'} %>">I came today through</label>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I came today through'} %>_1" name="<%= $field_map->{'I came today through'} %>" value="Flyer">Flyer
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I came today through'} %>_2" name="<%= $field_map->{'I came today through'} %>" value="Poster in my dorm/on-campus">Poster in my dorm/on-campus
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I came today through'} %>_3" name="<%= $field_map->{'I came today through'} %>" value="Website">Website
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I came today through'} %>_4" name="<%= $field_map->{'I came today through'} %>" value="Koinonia Event">Koinonia Event
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I came today through'} %>_5" name="<%= $field_map->{'I came today through'} %>" value="__other_option__">Friend/Other:
+    </label>
+    <input type="text" id="<%= $field_map->{'I came today through'} %>.other_option_response" name="<%= $field_map->{'I came today through'} %>.other_option_response">
+  </div>
+  <label for="<%= $field_map->{'I am interested in'} %>">I am interested in</label>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I am interested in'} %>_1" name="<%= $field_map->{'I am interested in'} %>" value="Joining a small group">Joining a small group
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I am interested in'} %>_2" name="<%= $field_map->{'I am interested in'} %>" value="Going to Sunday church service">Going to Sunday church service
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="<%= $field_map->{'I am interested in'} %>_3" name="<%= $field_map->{'I am interested in'} %>" value="Learning more about Christianity">Learning more about Christianity
+    </label>
+  </div>
+  <input type="hidden" name="<%= $field_map->{'UUID'} %>" value="<%= $uuid %>">
+  <div class="well">
+    <strong><small>Release of Liability and Disclaimer:</small></strong><br>
+    <small>I understand and agree that the State of California, the Trustees of the California State University, San Francisco State University, Cesar Chavez Student Center, Inc. and the officers, employees, volunteers, and agents of each of them (all hereinafter the Facility Owner/Event Holder) shall not be responsible for any liability or losses related to my participation in SF State Koinonia events except such loss or damage which was caused by the sole negligence or willful misconduct of the Facility Owner/Event Holder.  Furthermore, I assume all risk in the event of accident, injury, and/or loss and agree to use my personal medical and commercial general liability insurance as primary coverage.  I agree that I will be a member of SF State Koinonia for this one day, August 29, 2013.  I agree that photographs, pictures, slides, movies, video, or other media coverage may be taken in connection with my/minor’s participation in the Koinonia NSWN without compensation from the State of California, the Trustees of the California State University, San Francisco State University, Cesar Chavez Student Center, Inc., and the officers, employees, volunteers and agents of each of them and consent to the use of photographs, pictures, slides, movies, videos, or other media coverage for any legal purpose.</small>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

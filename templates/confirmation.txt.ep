@@ -1,0 +1,10 @@
+SFSU NSWN Registration Confirmation
+
+Awesome, <%= $first_name %>!
+You're now registered for NSWN!
+
+Please present this ticket or confirmation number at the entrance
+
+Here is your confirmation number:
+
+<%= $confirmation %>

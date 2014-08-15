@@ -1,0 +1,100 @@
+#!/usr/bin/env perl
+use Mojolicious::Lite;
+use Data::UUID;
+use Email::Sender::Simple qw(sendmail);
+use Email::Sender::Transport::SMTP qw();
+use Email::MIME::Creator;
+
+app->config(hypnotoad => {listen => ['http://0.0.0.0:5000'], workers => 5});
+app->log(Mojo::Log->new(path => 'mojo.log'));
+app->plugin(AccessLog => {log => 'access.log'});
+app->plugin('DefaultHelpers');
+
+my %field_map = (
+  'First Name'           => 'entry.791465173',
+  'Last Name'            => 'entry.1551840273',
+  'E-mail'               => 'entry.24747392',
+  'Phone'                => 'entry.537003944',
+  'Year in school'       => 'entry.1762211759',
+  'I came today through' => 'entry.765088178',
+  'I am interested in'   => 'entry.1067407543',
+  'UUID'                 => 'entry.1311627678',
+);
+
+my $google_form_id = '1YxqalP7q7xdbxW8jp2nZTAHymWbJHOhwgAx98cT4aHU';
+
+get '/' => sub {
+  my $self = shift;
+  my $uuid = Data::UUID->new->to_string(Data::UUID->new->create);
+
+  $self->render('index',
+    body_attributes => 'data-spy="scroll" data-target="#navbar"',
+    field_map       => \%field_map,
+    uuid            => $uuid,
+    google_form_id  => $google_form_id,
+  );
+};
+
+post '/confirmation' => sub {
+  my $self       = shift;
+  my $first_name = $self->param($field_map{'First Name'});
+  my $last_name  = $self->param($field_map{'Last Name'});
+  my $email      = $self->param($field_map{'E-mail'});
+  my $uuid       = $self->param($field_map{'UUID'});
+  my $code       = ( split '-', $uuid )[0];
+
+  my $email_message = Email::MIME->create(
+    header_str         => [
+      To               => qq("$first_name $last_name" <$email>),
+      From             => qq("NSWN Registration" <nswn\@sfsukoinonia.org>),
+      Subject          => 'NSWN Registration Confirmation',
+    ],
+    attributes         => {
+      content_type     => 'multipart/alternative',
+    },
+    parts              => [
+      Email::MIME->create(
+        attributes     => {
+          content_type => 'text/plain',
+          charset      => 'US-ASCII',
+          encoding     => 'base64',
+        },
+        body_str       => $self->include('confirmation',
+          format       => 'txt',
+          first_name   => $first_name,
+          confirmation => $code,
+        ),
+      ), 
+      Email::MIME->create(
+        attributes     => {
+          content_type => 'text/html',
+          charset      => 'US-ASCII',
+          encoding     => 'base64',
+        },
+        body_str       => $self->include('confirmation',
+          format       => 'html',
+          first_name   => $first_name,
+          confirmation => $code,
+        ),
+      ),
+    ],
+  );
+
+  sendmail($email_message, {
+    transport       => Email::Sender::Transport::SMTP->new({
+      host          => 'sfsukoinonia.org',
+      port          => 465,
+      sasl_username => 'nswn@sfsukoinonia.org',
+      sasl_password => 'NSWNt1m3!',
+      ssl           => 1,
+    }),
+  });
+
+  $self->render('confirmation',
+    format       => 'html',
+    first_name   => $first_name,
+    confirmation => $code,
+  );
+};
+
+app->start;

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NSWN Registration Confirmation</title>
+</head>
+<body align="center">
+  <table id="confirmation_ticket" border="1" width="800" height="400">
+    <tr>
+      <td>
+        <img src="http://nswnreg.sfsukoinonia.org/img/sfsu_logo.png" width="675" height="171" />
+        <h1>NSWN Registration Confirmation</h1>
+        <p>Awesome, <strong><%= $first_name %></strong>!<br>You're now registered for NSWN!<p>
+        <p><strong>Please present this ticket or confirmation number at the entrance</strong></p>
+        <p>Here is your confirmation number:</p>
+        <h2><%= $confirmation %></h2>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
