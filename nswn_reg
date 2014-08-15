@@ -48,6 +48,7 @@ post '/confirmation' => sub {
       To               => qq("$first_name $last_name" <$email>),
       From             => qq("NSWN Registration" <nswn\@sfsukoinonia.org>),
       Subject          => 'NSWN Registration Confirmation',
+      Cc               => 'nswn@sfsukoinonia.org',
     ],
     attributes         => {
       content_type     => 'multipart/alternative',
